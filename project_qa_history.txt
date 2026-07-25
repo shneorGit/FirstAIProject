@@ -1,0 +1,123 @@
+========================================================================
+                      PROJECT Q&A HISTORY & SUMMARY
+========================================================================
+
+------------------------------------------------------------------------
+Q1: "hi / this is the website I want to test: https://www.sport5.co.il/
+     please visit the website and make test plan"
+------------------------------------------------------------------------
+A1: 
+We analyzed the Sport5 website (Israel's main sports portal) and proposed a test plan covering its major components:
+- Header and main navigation tabs (e.g. Israeli football, basketball).
+- Real-time live scores ticker widget.
+- Search functionality with Hebrew characters support.
+- Media elements like videos and article detail cards.
+
+------------------------------------------------------------------------
+Q2: "can you offer more tests to do in this website? https://www.sport5.co.il/"
+------------------------------------------------------------------------
+A2: 
+We designed a comprehensive 5-test automation suite:
+1. "Check Homepage Title": Verifies the browser title contains the correct Hebrew text 'ספורט 5'.
+2. "Navigate to Israeli Football section": Verifies the main category link can be clicked and redirects to the correct domain folder.
+3. "Verify Live Scores/Ticker Widget presence": Safely checks if the live scoreboard/ticker container is visible or present on the page.
+4. "Perform Search functionality": Tests the search engine by typing 'מכבי' (Maccabi) in Hebrew and verifying the search result URL matches.
+5. "Take Homepage Screenshot": Captures a full homepage screenshot to track UI regressions.
+
+------------------------------------------------------------------------
+Q3: "plese make a new text file with all the questions ans annswers in 
+     this project. just keep it simpal and clear what I'm asking and 
+     what you answering. about the code: what you cinking d'ont add 
+     all the code and just add in wich file you do changes or to add 
+     all the code also?"
+------------------------------------------------------------------------
+A3: 
+This file (project_qa_history.txt) is the simple and clear Q&A log you requested. 
+To keep it simple, we do not paste the full files of raw code here (which would make this document long and hard to navigate). Instead, we list the files that were changed or created below, with a brief summary of what they do.
+
+========================================================================
+                      PROJECT FILES CREATED & MODIFIED
+========================================================================
+
+1. CREATE FILE: src/pages/sport5Page.ts
+   - Description: A Page Object Model (POM) class representing the Sport5 homepage and layout.
+   - Key Features:
+     * Inherits from BasePage.
+     * Contains locators for navigation menus, search inputs, and ticker widgets.
+     * Implements helper methods like goToHomepage(), searchFor(query), and getNavigationLink(text).
+
+2. CREATE FILE: src/tests/sport5Tests.spec.ts
+   - Description: The main automation test spec file containing our Playwright test scenarios.
+   - Key Features:
+     * Contains 5 automated tests corresponding to the test plan.
+     * Fully runs in headless/headed browser mode, executing assertions and taking screen captures.
+
+3. SCREENSHOTS GENERATED: screenshots/
+   - sport5-homepage-fresh.png: Live homepage screenshot.
+   - sport5-search-results.png: Search results page screenshot after searching for 'מכבי'.
+
+------------------------------------------------------------------------
+Q4: "Now we need to add a test reporting tool to save test logs, results, and screenshots. Which platform do you recommend?"
+------------------------------------------------------------------------
+A4:
+We highly recommend the built-in **Playwright HTML Reporter** because it is zero-setup, dependency-free, and natively integrates with screenshots and execution trace recordings. We modified the config to automatically capture screenshots on every test run and record trace details when tests fail or retry.
+
+We updated `playwright.config.ts` with the new reporter settings, ran the tests, and generated a rich interactive HTML report at `playwright-report/index.html`.
+
+------------------------------------------------------------------------
+Q5: "there is an API for this website? if so: lat's add some API test for this website"
+------------------------------------------------------------------------
+A5:
+Yes! By intercepting real network traffic on Sport5 using Playwright's Page event listener, we discovered their active backend API endpoints. One of the main dynamic endpoints they use is `https://www.sport5.co.il/Ajax/GetNewsRoomTS.aspx` (which returns active news room epoch timestamps).
+
+We added an API integration spec (`src/tests/sport5Api.spec.ts`) that runs directly in milliseconds without launching full GUI browsers, ensuring:
+1. Dynamic backend endpoint `GetNewsRoomTS.aspx` returns status 200 OK and a valid dynamic timestamp response.
+2. Main Homepage API responds with healthy status and the correct `text/html` headers.
+
+------------------------------------------------------------------------
+Q6: "add non native mobile tests using chrome"
+------------------------------------------------------------------------
+A6:
+We added non-native (responsive) mobile web testing by configuring Playwright device emulation in `playwright.config.ts`. We set up separate projects for "Desktop Chrome" and "Mobile Chrome" (using the emulated `Pixel 5` preset). 
+
+When run on Mobile Chrome, Sport5 automatically redirects to their dedicated mobile subdomain (`https://m.sport5.co.il/`). 
+
+We created a mobile test suite (`src/tests/sport5Mobile.spec.ts`) verifying:
+1. Auto-redirection to the `m.sport5.co.il` subdomain.
+2. The viewport and layout scale properly for screens under 500px.
+3. Mobile layout components (like specific category links) are attached and interactable in the mobile DOM.
+4. Auto-saves mobile screenshots to `screenshots/sport5-mobile-homepage.png`.
+
+                      UPDATED PROJECT FILES LIST
+
+4. CREATE FILE: src/tests/sport5Api.spec.ts
+   - Description: Playwright API test suite targeting Sport5's live news synchronization endpoints.
+   - Key Features:
+     * Executes in milliseconds.
+     * Verifies server headers, content-type integrity, and payload non-emptiness.
+
+5. CREATE FILE: src/tests/sport5Mobile.spec.ts
+   - Description: Playwright Mobile emulation test suite.
+   - Key Features:
+     * Emulates Pixel 5 Android/Chrome environment.
+     * Asserts auto-redirection to the mobile subdomain (`m.sport5.co.il`).
+     * Asserts mobile viewport dimensions and mobile DOM attachment integrity.
+
+------------------------------------------------------------------------
+Q7: "now lat's connect the project to github and create pipeline for this project to run all the tests"
+------------------------------------------------------------------------
+A7:
+We designed an automated CI/CD pipeline using **GitHub Actions** to automatically build and run your tests on every code push or pull request to the `main` or `master` branches.
+
+We:
+1. Updated `package.json` with standard run scripts (`npm run test`, `npm run test:desktop`, `npm run test:mobile`, `npm run test:api`).
+2. Created a continuous integration action file at `.github/workflows/playwright.yml` that pulls the repository, sets up Node.js, installs dependencies, installs Playwright's system-level browser packages, runs the test command, and uploads the final interactive HTML report as a secure download artifact on GitHub.
+
+                      UPDATED PROJECT FILES LIST
+
+6. CREATE FILE: .github/workflows/playwright.yml
+   - Description: GitHub Actions automated workflow pipeline script.
+   - Key Features:
+     * Triggers automatically on pushes or PRs.
+     * Restores Node environments, caches dependencies, and executes Playwright tests on clean Linux runners.
+     * Safely uploads the static HTML test results and screenshots as a build artifact on success or failure.

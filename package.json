@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "test": "playwright test",
+    "test:desktop": "playwright test --project='Desktop Chrome'",
+    "test:mobile": "playwright test --project='Mobile Chrome'",
+    "test:api": "playwright test src/tests/sport5Api.spec.ts"
+  },
+  "devDependencies": {
+    "@libp2p/crypto": "^5.1.21",
+    "@playwright/test": "^1.61.1",
+    "playwright": "^1.61.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  }
+}
