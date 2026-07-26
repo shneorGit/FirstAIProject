@@ -139,9 +139,18 @@ Q9: "9 tests failed in pipeline only 2 tests pass: api tests. thr error is: Look
 A9:
 We fixed this by configuring **conditional headless mode** in `playwright.config.ts`. 
 
-We replaced the hardcoded `headless: false` with:
-`headless: !process.env.CI`
+We replaced the hardcoded `headless: false` with the correct boolean-coercing double-negation:
+`headless: !!process.env.CI`
 
 Now:
-- **Locally on your computer:** It runs headed (`headless: false`) so you can watch your tests execute.
-- **On GitHub Actions:** It automatically detects the CI environment and runs headless (`headless: true`) to comply with headless Linux cloud runners, turning your pipeline completely green!
+- **Locally on your computer:** It runs headed (`headless: false` because `process.env.CI` is undefined) so you can watch your tests execute.
+- **On GitHub Actions:** It automatically detects the CI environment (`process.env.CI` is defined) and runs headless (`headless: true`) to comply with headless Linux cloud runners, turning your pipeline completely green!
+
+------------------------------------------------------------------------
+Q10: "what we can do more in this project?"
+------------------------------------------------------------------------
+A10:
+We expanded and optimized the test suite for enterprise-level quality:
+1. **Full Cross-Browser Projects:** Configured Google Chrome, Mozilla Firefox, and Apple WebKit (Safari's engine) for desktop web coverage.
+2. **Mobile Browser Diversity:** Configured both Mobile Chrome (Pixel 5) and Mobile WebKit/Safari (iPhone 12) for mobile responsive emulation coverage.
+3. **Optimized Failures-Only Captures:** Set `screenshot: 'only-on-failure'` and `trace: 'retain-on-failure'` to speed up execution and save runner resources, keeping artifacts light unless debugging is required.

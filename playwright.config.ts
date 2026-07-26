@@ -9,26 +9,62 @@ export default defineConfig({
     ['html', { open: 'never', outputFolder: 'playwright-report' }]
   ],
   projects: [
+    // --- DESKTOP BROWSERS ---
     {
       name: 'Desktop Chrome',
-      testIgnore: /.*Mobile\.spec\.ts/, // Skip mobile tests in desktop project
+      testIgnore: /.*Mobile\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        headless: !!process.env.CI, // Runs headed locally, headless on CI
+        headless: !!process.env.CI, // Double negation ensures boolean conversion
         baseURL: 'https://www.sport5.co.il/',
-        screenshot: 'on',
-        trace: 'on-first-retry',
+        screenshot: 'only-on-failure', // Optimized: Only capture screenshot on failure
+        trace: 'retain-on-failure',     // Optimized: Only keep execution trace on failure
       },
     },
     {
+      name: 'Desktop Firefox',
+      testIgnore: /.*Mobile\.spec\.ts/,
+      use: {
+        ...devices['Desktop Firefox'],
+        headless: !!process.env.CI,
+        baseURL: 'https://www.sport5.co.il/',
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
+      },
+    },
+    {
+      name: 'Desktop Safari (WebKit)',
+      testIgnore: /.*Mobile\.spec\.ts/,
+      use: {
+        ...devices['Desktop Safari'],
+        headless: !!process.env.CI,
+        baseURL: 'https://www.sport5.co.il/',
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
+      },
+    },
+
+    // --- MOBILE BROWSERS ---
+    {
       name: 'Mobile Chrome',
-      testMatch: /.*Mobile\.spec\.ts/, // Only run mobile spec in mobile project
+      testMatch: /.*Mobile\.spec\.ts/,
       use: {
         ...devices['Pixel 5'],
-        headless: !!process.env.CI, // Runs headed locally, headless on CI
+        headless: !!process.env.CI,
         baseURL: 'https://www.sport5.co.il/',
-        screenshot: 'on',
-        trace: 'on-first-retry',
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
+      },
+    },
+    {
+      name: 'Mobile Safari (WebKit)',
+      testMatch: /.*Mobile\.spec\.ts/,
+      use: {
+        ...devices['iPhone 12'],
+        headless: !!process.env.CI,
+        baseURL: 'https://www.sport5.co.il/',
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
       },
     }
   ]
