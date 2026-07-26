@@ -14,7 +14,7 @@ export default defineConfig({
       testIgnore: /.*Mobile\.spec\.ts/, // Skip mobile tests in desktop project
       use: {
         ...devices['Desktop Chrome'],
-        headless: false,
+        headless: !process.env.CI, // Runs headed locally, headless on CI
         baseURL: 'https://www.sport5.co.il/',
         screenshot: 'on',
         trace: 'on-first-retry',
@@ -25,7 +25,7 @@ export default defineConfig({
       testMatch: /.*Mobile\.spec\.ts/, // Only run mobile spec in mobile project
       use: {
         ...devices['Pixel 5'],
-        headless: false,
+        headless: !process.env.CI, // Runs headed locally, headless on CI
         baseURL: 'https://www.sport5.co.il/',
         screenshot: 'on',
         trace: 'on-first-retry',

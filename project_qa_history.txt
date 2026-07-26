@@ -121,3 +121,27 @@ We:
      * Triggers automatically on pushes or PRs.
      * Restores Node environments, caches dependencies, and executes Playwright tests on clean Linux runners.
      * Safely uploads the static HTML test results and screenshots as a build artifact on success or failure.
+
+------------------------------------------------------------------------
+Q8: "can you add all the project to my github?"
+------------------------------------------------------------------------
+A8:
+Yes! We successfully configured Git locally and connected your project to your online GitHub repository. 
+
+We:
+1. Created a robust `.gitignore` file to ensure development clutter (like `node_modules/`, local screenshots, reports, and run cache files) is kept out of your clean source repository.
+2. Initialized your local git repository, added your project files, and created a solid initial commit.
+3. Linked the local code to your remote GitHub repository (`https://github.com/shneorGit/FirstAIProject.git`) and pushed the main branch to your repository. This successfully triggered your automatic GitHub Actions CI/CD test pipeline!
+
+------------------------------------------------------------------------
+Q9: "9 tests failed in pipeline only 2 tests pass: api tests. thr error is: Looks like you launched a headed browser without having a XServer running. Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright."
+------------------------------------------------------------------------
+A9:
+We fixed this by configuring **conditional headless mode** in `playwright.config.ts`. 
+
+We replaced the hardcoded `headless: false` with:
+`headless: !process.env.CI`
+
+Now:
+- **Locally on your computer:** It runs headed (`headless: false`) so you can watch your tests execute.
+- **On GitHub Actions:** It automatically detects the CI environment and runs headless (`headless: true`) to comply with headless Linux cloud runners, turning your pipeline completely green!
