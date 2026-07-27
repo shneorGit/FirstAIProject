@@ -39,7 +39,7 @@ export default defineConfig({
         ...devices['Desktop Safari'],
         headless: !!process.env.CI,
         baseURL: 'https://www.sport5.co.il/',
-        screenshot: 'only-on-failure',
+        screenshot: 'off', // Turn off screenshots for WebKit to prevent hangs on headless Linux CI
         trace: 'retain-on-failure',
       },
     },
@@ -63,7 +63,7 @@ export default defineConfig({
         ...devices['iPhone 12'],
         headless: !!process.env.CI,
         baseURL: 'https://www.sport5.co.il/',
-        screenshot: 'only-on-failure',
+        screenshot: 'off', // Turn off screenshots for WebKit to prevent hangs on headless Linux CI
         trace: 'retain-on-failure',
       },
     }
