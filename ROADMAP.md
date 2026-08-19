@@ -7,9 +7,9 @@ This document tracks the future enhancements for the Playwright automation frame
 - [x] **Task 1: Data-Driven Testing (DDT)**
   - **Goal:** Move hardcoded query terms (e.g., "מכבי") and category targets out of test scripts and into external JSON files (Fixtures). Loop tests dynamically.
   - **Status:** Completed. Added fixtures for `searchQueries.json` and `categories.json` and refactored `sport5Tests.spec.ts` to run dynamically over arrays.
-- [ ] **Task 2: Visual Regression Testing**
+- [x] **Task 2: Visual Regression Testing**
   - **Goal:** Add visual layout assertions using `expect(page).toHaveScreenshot()` on static elements like header logotype, scoreboard widget structure, or footer links to prevent CSS/UI bugs.
-  - **Status:** Pending.
+  - **Status:** Completed. Created `src/tests/sport5Visual.spec.ts` with custom element pixel matching and dynamic element masking to support robust comparisons on media-rich platforms.
 - [ ] **Task 3: Client-Side Performance Metrics**
   - **Goal:** Extract Core Web Vitals and load timing KPIs using browser `window.performance` API. Fail tests if loading times exceed defined SLAs (e.g., LCP > 3 seconds).
   - **Status:** Pending.

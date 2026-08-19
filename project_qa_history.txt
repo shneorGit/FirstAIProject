@@ -130,6 +130,38 @@ In `playwright.config.ts`, we set:
 1. `screenshot: 'only-on-failure'`: Playwright will not capture screenshots for successful/passing tests, eliminating heavy image binaries on green runs.
 2. `trace: 'retain-on-failure'`: Playwright will immediately discard execution trace recordings for passing tests, preserving them only on failed runs to help you debug.
 
+                      PROJECT FILES SUMMARY LIST
+
+1. CREATE FILE: src/pages/sport5Page.ts
+   - Description: A Page Object Model (POM) class representing the Sport5 homepage and layout.
+   - Key Features: Locators for navigation menus, search inputs, and ticker widgets.
+
+2. CREATE FILE: src/tests/sport5Tests.spec.ts
+   - Description: The main automation test spec file containing our Playwright test scenarios (DDT-enabled).
+   - Key Features: Runs dynamically over category and search fixtures.
+
+3. SCREENSHOTS GENERATED: screenshots/
+   - sport5-homepage-fresh.png, sport5-search-results.png: Visual validation captures.
+
+4. CREATE FILE: src/tests/sport5Api.spec.ts
+   - Description: Playwright API test suite targeting Sport5's live news synchronization endpoints.
+   - Key Features: Executes in milliseconds, verifies server headers and payload non-emptiness.
+
+5. CREATE FILE: src/tests/sport5Mobile.spec.ts
+   - Description: Playwright Mobile emulation test suite.
+   - Key Features: Emulates Pixel 5, asserts mobile redirects, viewports, and DOM components.
+
+6. CREATE FILE: .github/workflows/playwright.yml
+   - Description: GitHub Actions automated workflow pipeline script.
+   - Key Features: Automated test runner and artifact uploader on push/PR.
+
+7. CREATE FILE: ROADMAP.md
+   - Description: Project enhancement backlog and roadmap file.
+   - Key Features: Prioritized milestones, технические specifications, and progress checkmarks.
+
+8. CREATE FILES: src/tests/fixtures/searchQueries.json & src/tests/fixtures/categories.json
+   - Description: Test data fixtures for Data-Driven Testing (DDT).
+   - Key Features: Decouples search and category data from core test scripts.
 ------------------------------------------------------------------------
 Q13: "Review this file and tell me what else can be added, and how can we save these tasks for later?"
 ------------------------------------------------------------------------
@@ -143,6 +175,53 @@ We reviewed the project history and designed an Enterprise-Ready Roadmap (`ROADM
 
 We immediately implemented **Task 1: Data-Driven Testing (DDT)** by moving category titles and search queries into external JSON files (`src/tests/fixtures/`) and dynamically looping tests over these datasets.
 
+------------------------------------------------------------------------
+Q14: "Continue working on the roadmap.md file in order of the tasks. Let's do task number 2 right now."
+------------------------------------------------------------------------
+A14:
+We implemented **Task 2: Visual Regression Testing**. 
+
+We:
+1. Created `src/tests/sport5Visual.spec.ts` containing visual assertions targeting static elements (e.g., the main logo) using `expect(element).toHaveScreenshot()`.
+2. Implemented intelligent dynamic element masking (`maskElements`) in `toHaveScreenshot()` to cover variable layout blocks (such as ad spots, live score feeds, and iframe banners). This prevents false test failures while performing full above-the-fold layout testing.
+3. Successfully ran and updated initial baseline screenshot templates using Playwright's `--update-snapshots` command.
+
+                      PROJECT FILES SUMMARY LIST
+
+1. CREATE FILE: src/pages/sport5Page.ts
+   - Description: A Page Object Model (POM) class representing the Sport5 homepage and layout.
+   - Key Features: Locators for navigation menus, search inputs, and ticker widgets.
+
+2. CREATE FILE: src/tests/sport5Tests.spec.ts
+   - Description: The main automation test spec file containing our Playwright test scenarios (DDT-enabled).
+   - Key Features: Runs dynamically over category and search fixtures.
+
+3. SCREENSHOTS GENERATED: screenshots/
+   - sport5-homepage-fresh.png, sport5-search-results.png: Visual validation captures.
+
+4. CREATE FILE: src/tests/sport5Api.spec.ts
+   - Description: Playwright API test suite targeting Sport5's live news synchronization endpoints.
+   - Key Features: Executes in milliseconds, verifies server headers and payload non-emptiness.
+
+5. CREATE FILE: src/tests/sport5Mobile.spec.ts
+   - Description: Playwright Mobile emulation test suite.
+   - Key Features: Emulates Pixel 5, asserts mobile redirects, viewports, and DOM components.
+
+6. CREATE FILE: .github/workflows/playwright.yml
+   - Description: GitHub Actions automated workflow pipeline script.
+   - Key Features: Automated test runner and artifact uploader on push/PR.
+
+7. CREATE FILE: ROADMAP.md
+   - Description: Project enhancement backlog and roadmap file.
+   - Key Features: Prioritized milestones, technical specifications, and progress checkmarks.
+
+8. CREATE FILES: src/tests/fixtures/searchQueries.json & src/tests/fixtures/categories.json
+   - Description: Test data fixtures for Data-Driven Testing (DDT).
+   - Key Features: Decouples search and category data from core test scripts.
+
+9. CREATE FILE: src/tests/sport5Visual.spec.ts
+   - Description: Visual regression/comparison test suite.
+   - Key Features: Uses expect().toHaveScreenshot() with customized masking and anti-aliasing tolerances.
 ========================================================================
                       PROJECT FILES SUMMARY LIST
 ========================================================================
